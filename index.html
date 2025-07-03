@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>WolfClient Profile Suche</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background: #23272a;
+            color: #fff;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 480px;
+            margin: 40px auto;
+            background: #2c2f33;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px #0008;
+            padding: 32px 24px 24px 24px;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 0;
+            font-size: 2em;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #43b581 30%, #7289da 70%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .search-bar {
+            margin: 24px 0 32px 0;
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+        .search-bar input {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1em;
+            width: 180px;
+            background: #23272a;
+            color: #fff;
+            outline: none;
+            box-shadow: 0 2px 8px #0003;
+        }
+        .search-bar button {
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: none;
+            background: #43b581;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .search-bar button:hover {
+            background: #7289da;
+            transform: scale(1.05);
+        }
+        .profile-card {
+            background: #23272a;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px #7289da33;
+            padding: 24px 16px 16px 16px;
+            margin: 0 auto 24px auto;
+            max-width: 340px;
+            animation: fadeIn 1s both;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(24px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 12px #43b58155;
+            background: #111;
+            image-rendering: pixelated;
+        }
+        .mcname {
+            font-size: 1.3em;
+            color: #43b581;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .oldnames {
+            color: #b9bbbe;
+            font-size: 0.98em;
+            margin-bottom: 10px;
+        }
+        .cosmetics-list {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 10px;
+        }
+        .cosmetic {
+            background: #23272a;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px #7289da55;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            font-size: 2em;
+            border: 2px solid #43b58155;
+            user-select: none;
+            transition: transform 0.2s;
+        }
+        .cosmetic:hover {
+            transform: scale(1.13) rotate(-6deg);
+            box-shadow: 0 4px 16px #43b58199;
+            border-color: #43b581;
+        }
+        .notfound {
+            color: #ff5555;
+            margin-top: 24px;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WolfClient Profile Suche</h1>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Minecraft Name...">
+            <button id="searchBtn">Suchen</button>
+        </div>
+        <div id="profileResult"></div>
+    </div>
+    <script src="profiles.js"></script>
+    <script>
+        // profiles.js muss im gleichen Ordner liegen und folgendes enthalten:
+        // window.wolfProfiles = [ ... ];
+        // Beispiel siehe unten!
+
+        function searchProfile() {
+            const name = document.getElementById('searchInput').value.trim();
+            const result = document.getElementById('profileResult');
+            result.innerHTML = "";
+
+            if (!name) return;
+
+            const profiles = window.wolfProfiles || [];
+            const profile = profiles.find(p => p.name.toLowerCase() === name.toLowerCase());
+            if (!profile) {
+                result.innerHTML = `<div class="notfound">Kein Profil gefunden für <b>${name}</b>.</div>`;
+                return;
+            }
+
+            let oldNames = "";
+            if (profile.oldNames && profile.oldNames.length > 0) {
+                oldNames = `<div class="oldnames">Frühere Namen: ${profile.oldNames.join(", ")}</div>`;
+            }
+
+            let cosmetics = "";
+            if (profile.cosmetics && profile.cosmetics.length > 0) {
+                cosmetics = `<div class="cosmetics-list">` +
+                    profile.cosmetics.map(c => `<div class="cosmetic" title="${c.name}">${c.icon}</div>`).join("") +
+                    `</div>`;
+            }
+
+            result.innerHTML = `
+                <div class="profile-card">
+                    <img class="avatar" src="${profile.avatar}" alt="Avatar von ${profile.name}">
+                    <div class="mcname">${profile.name}</div>
+                    ${oldNames}
+                    ${cosmetics}
+                </div>
+            `;
+        }
+
+        document.getElementById('searchBtn').addEventListener('click', searchProfile);
+        document.getElementById('searchInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') searchProfile();
+        });
+    </script>
+</body>
+</html>
