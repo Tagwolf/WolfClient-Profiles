@@ -96,10 +96,13 @@
             margin-bottom: 10px;
         }
         .cosmetics-list {
+            margin-top: 10px;
+        }
+        .cosmetic-row {
             display: flex;
             justify-content: center;
-            gap: 14px;
-            margin-top: 10px;
+            gap: 10px;
+            margin-bottom: 4px;
         }
         .cosmetic {
             background: #23272a;
@@ -139,10 +142,6 @@
     </div>
     <script src="profiles.js"></script>
     <script>
-        // profiles.js muss im gleichen Ordner liegen und folgendes enthalten:
-        // window.wolfProfiles = [ ... ];
-        // Beispiel siehe unten!
-
         function searchProfile() {
             const name = document.getElementById('searchInput').value.trim();
             const result = document.getElementById('profileResult');
@@ -165,8 +164,14 @@
             let cosmetics = "";
             if (profile.cosmetics && profile.cosmetics.length > 0) {
                 cosmetics = `<div class="cosmetics-list">` +
-                    profile.cosmetics.map(c => `<div class="cosmetic" title="${c.name}">${c.icon}</div>`).join("") +
+                    profile.cosmetics.map(row =>
+                        `<div class="cosmetic-row">` +
+                        row.map(c => `<span class="cosmetic" title="${c.name}">${c.icon}</span>`).join("") +
+                        `</div>`
+                    ).join("") +
                     `</div>`;
+            } else {
+                cosmetics = `<div class="notfound"><b>${profile.name}</b> hat bisher keine Cosmetics.</div>`;
             }
 
             result.innerHTML = `
