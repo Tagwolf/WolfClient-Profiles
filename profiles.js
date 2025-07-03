@@ -1,7 +1,6 @@
 window.wolfProfiles = [
     {
         name: "BimsHingefallt",
-        oldNames: ["BimsHingefallt_"],
         avatar: "https://mc-heads.net/avatar/BimsHingefallt/80.png",
         cosmetics: [
             [
@@ -18,7 +17,6 @@ window.wolfProfiles = [
     },
     {
         name: "MagicWolfMC",
-        oldNames: ["MagicWolf"],
         avatar: "https://mc-heads.net/avatar/MagicWolfMC/80.png",
         cosmetics: [
             [
@@ -32,7 +30,6 @@ window.wolfProfiles = [
     },
     {
         name: "Steve",
-        oldNames: [],
         avatar: "https://mc-heads.net/avatar/Steve/80.png",
         cosmetics: [
             [
@@ -45,7 +42,6 @@ window.wolfProfiles = [
     },
     {
         name: "NightwolfLG",
-        oldNames: ["Nightwolf", "Nighty"],
         avatar: "https://mc-heads.net/avatar/NightwolfLG/80.png",
         cosmetics: [
             [
@@ -88,7 +84,6 @@ window.wolfProfiles = [
     },
     {
         name: "DLS_GoldGeist",
-        oldNames: [],
         avatar: "https://mc-heads.net/avatar/DLS_GoldGeist/80.png",
         cosmetics: [
             [
@@ -131,18 +126,14 @@ window.wolfProfiles = [
     },
     {
         name: "Alex",
-        oldNames: [],
         avatar: "https://mc-heads.net/avatar/Alex/80.png",
         cosmetics: []
     },
     {
         name: "Player123",
-        oldNames: ["PlayerABC"],
         avatar: "https://mc-heads.net/avatar/Player123/80.png",
         cosmetics: []
     },
     {
         name: "WolfFan",
-        oldNames: [],
-        avatar: "https://mc-heads.net/avatar/WolfFan/80.png",
-        cosmetics: [
+        avatar: "https://mc
