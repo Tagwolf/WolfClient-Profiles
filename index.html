@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WolfClient Profil-Finder</title>
-    <link rel="stylesheet" href="style.css">
     <style>
         body {
             background: linear-gradient(120deg, #23272a 60%, #7289da 100%);
@@ -192,25 +191,8 @@
     </div>
     <script src="spieler.js"></script>
     <script>
-    function searchProfile() {
-        const name = document.getElementById('searchInput').value.trim();
-        const result = document.getElementById('profileResult');
-        result.innerHTML = "";
-
-        if (!name) return;
-
-        const profile = window.wolfProfiles.find(p => p.name.toLowerCase() === name.toLowerCase());
-        if (!profile) {
-            result.innerHTML = `
-                <div class="profile-card">
-                    <img class="avatar" src="https://mc-heads.net/avatar/${encodeURIComponent(name)}/92.png" alt="Avatar von ${name}">
-                    <div class="mcname">${name}</div>
-                    <div class="notfound"><b>${name}</b> hat bisher keine Cosmetics.</div>
-                </div>
-            `;
-            return;
-        }
-
+    // Warten bis die Profile geladen sind
+    function renderProfile(profile) {
         let cosmetics = "";
         if (profile.cosmetics && profile.cosmetics.length > 0) {
             cosmetics = `<div class="cosmetics-list">` +
@@ -223,8 +205,7 @@
         } else {
             cosmetics = `<div class="notfound"><b>${profile.name}</b> hat bisher keine Cosmetics.</div>`;
         }
-
-        result.innerHTML = `
+        return `
             <div class="profile-card">
                 <img class="avatar" src="${profile.avatar}" alt="Avatar von ${profile.name}">
                 <div class="mcname">${profile.name}</div>
@@ -233,33 +214,54 @@
         `;
     }
 
-    document.getElementById('searchBtn').addEventListener('click', searchProfile);
-    document.getElementById('searchInput').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') searchProfile();
-    });
-
-    // Standardprofil anzeigen
-    window.addEventListener('DOMContentLoaded', function() {
-        const steve = window.wolfProfiles.find(p => p.name === "Steve");
-        let cosmetics = "";
-        if (steve.cosmetics && steve.cosmetics.length > 0) {
-            cosmetics = `<div class="cosmetics-list">` +
-                steve.cosmetics.map(row =>
-                    `<div class="cosmetic-row">` +
-                    row.map(c => `<span class="cosmetic" title="${c.name}">${c.icon}</span>`).join("") +
-                    `</div>`
-                ).join("") +
-                `</div>`;
-        } else {
-            cosmetics = `<div class="notfound"><b>Steve</b> hat bisher keine Cosmetics.</div>`;
-        }
-        document.getElementById('profileResult').innerHTML = `
+    function renderNotFound(name) {
+        return `
             <div class="profile-card">
-                <img class="avatar" src="${steve.avatar}" alt="Avatar von Steve">
-                <div class="mcname">Steve</div>
-                ${cosmetics}
+                <img class="avatar" src="https://mc-heads.net/avatar/${encodeURIComponent(name)}/92.png" alt="Avatar von ${name}">
+                <div class="mcname">${name}</div>
+                <div class="notfound"><b>${name}</b> hat bisher keine Cosmetics.</div>
             </div>
         `;
+    }
+
+    function searchProfile() {
+        const name = document.getElementById('searchInput').value.trim();
+        const result = document.getElementById('profileResult');
+        result.innerHTML = "";
+
+        if (!name) return;
+
+        // wolfProfiles muss geladen sein!
+        if (!window.wolfProfiles) {
+            result.innerHTML = `<div class="notfound">Spielerliste wird geladen...</div>`;
+            return;
+        }
+
+        const profile = window.wolfProfiles.find(p => p.name.toLowerCase() === name.toLowerCase());
+        if (!profile) {
+            result.innerHTML = renderNotFound(name);
+            return;
+        }
+        result.innerHTML = renderProfile(profile);
+    }
+
+    // Event Listener erst nach DOMContentLoaded und nach Laden von spieler.js!
+    window.addEventListener('DOMContentLoaded', function() {
+        // Standardprofil anzeigen
+        function showDefault() {
+            if (!window.wolfProfiles) {
+                setTimeout(showDefault, 100); // Retry until loaded
+                return;
+            }
+            const steve = window.wolfProfiles.find(p => p.name === "Steve");
+            document.getElementById('profileResult').innerHTML = renderProfile(steve);
+        }
+        showDefault();
+
+        document.getElementById('searchBtn').addEventListener('click', searchProfile);
+        document.getElementById('searchInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') searchProfile();
+        });
     });
     </script>
 </body>
