@@ -1,7 +1,7 @@
 window.wolfProfiles = [
     {
         name: "BimsHingefallt",
-        avatar: "https://mc-heads.net/avatar/BimsHingefallt/80.png",
+        avatar: "https://mc-heads.net/avatar/BimsHingefallt/92.png",
         cosmetics: [
             [
                 { name: "1 Jahr Kuchen", icon: "🎂" },
@@ -17,7 +17,7 @@ window.wolfProfiles = [
     },
     {
         name: "MagicWolfMC",
-        avatar: "https://mc-heads.net/avatar/MagicWolfMC/80.png",
+        avatar: "https://mc-heads.net/avatar/MagicWolfMC/92.png",
         cosmetics: [
             [
                 { name: "1 Jahr Kuchen", icon: "🎂" },
@@ -30,7 +30,7 @@ window.wolfProfiles = [
     },
     {
         name: "Steve",
-        avatar: "https://mc-heads.net/avatar/Steve/80.png",
+        avatar: "https://mc-heads.net/avatar/Steve/92.png",
         cosmetics: [
             [
                 { name: "1 Jahr Kuchen", icon: "🎂" }
@@ -42,7 +42,7 @@ window.wolfProfiles = [
     },
     {
         name: "NightwolfLG",
-        avatar: "https://mc-heads.net/avatar/NightwolfLG/80.png",
+        avatar: "https://mc-heads.net/avatar/NightwolfLG/92.png",
         cosmetics: [
             [
                 { name: "1 Jahr Kuchen", icon: "🎂" }, { name: "Wolf Ohren", icon: "🐺" }, { name: "Krone", icon: "👑" }
@@ -84,7 +84,7 @@ window.wolfProfiles = [
     },
     {
         name: "DLS_GoldGeist",
-        avatar: "https://mc-heads.net/avatar/DLS_GoldGeist/80.png",
+        avatar: "https://mc-heads.net/avatar/DLS_GoldGeist/92.png",
         cosmetics: [
             [
                 { name: "1 Jahr Kuchen", icon: "🎂" }, { name: "Wolf Ohren", icon: "🐺" }, { name: "Krone", icon: "👑" }
@@ -126,17 +126,17 @@ window.wolfProfiles = [
     },
     {
         name: "Alex",
-        avatar: "https://mc-heads.net/avatar/Alex/80.png",
+        avatar: "https://mc-heads.net/avatar/Alex/92.png",
         cosmetics: []
     },
     {
         name: "Player123",
-        avatar: "https://mc-heads.net/avatar/Player123/80.png",
+        avatar: "https://mc-heads.net/avatar/Player123/92.png",
         cosmetics: []
     },
     {
         name: "WolfFan",
-        avatar: "https://mc-heads.net/avatar/WolfFan/80.png",
+        avatar: "https://mc-heads.net/avatar/WolfFan/92.png",
         cosmetics: [
             [
-                { name: "1 Jahr Kuchen", icon: "🎂" }
+                { name: "1 Jahr Kuchen", icon: "🎂"
