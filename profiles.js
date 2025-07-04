@@ -136,4 +136,7 @@ window.wolfProfiles = [
     },
     {
         name: "WolfFan",
-        avatar: "https://mc
+        avatar: "https://mc-heads.net/avatar/WolfFan/80.png",
+        cosmetics: [
+            [
+                { name: "1 Jahr Kuchen", icon: "🎂" }
