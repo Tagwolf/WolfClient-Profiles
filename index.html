@@ -14,7 +14,7 @@
             min-height: 100vh;
         }
         .container {
-            max-width: 500px;
+            max-width: 900px;
             margin: 48px auto;
             background: #23272aee;
             border-radius: 20px;
@@ -77,33 +77,53 @@
             background: linear-gradient(90deg, #7289da 60%, #43b581 100%);
             transform: scale(1.07);
         }
-        .profile-card {
+        .profile-row {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 40px;
+            margin: 0 auto 24px auto;
+            max-width: 800px;
             background: #2c2f33;
             border-radius: 16px;
             box-shadow: 0 2px 16px #7289da33;
-            padding: 28px 18px 18px 18px;
-            margin: 0 auto 24px auto;
-            max-width: 360px;
+            padding: 32px 24px;
             animation: fadeIn 1s both;
+        }
+        @media (max-width: 700px) {
+            .profile-row {
+                flex-direction: column;
+                align-items: center;
+                padding: 18px 8px;
+            }
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(24px);}
             to { opacity: 1; transform: translateY(0);}
         }
         .avatar {
-            width: 92px;
-            height: 92px;
-            border-radius: 16px;
+            width: 140px;
+            height: 140px;
+            border-radius: 18px;
             margin-bottom: 14px;
             box-shadow: 0 2px 16px #43b58155;
             background: #111;
             image-rendering: pixelated;
         }
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            min-width: 220px;
+            max-width: 260px;
+        }
         .mcname {
-            font-size: 1.6em;
+            font-size: 2em;
             color: #fff;
             font-weight: 900;
-            margin-bottom: 2px;
+            margin-bottom: 10px;
             letter-spacing: 1px;
             background: linear-gradient(90deg, #43b581 40%, #7289da 100%);
             -webkit-background-clip: text;
@@ -112,49 +132,40 @@
             font-family: 'Segoe UI Black', 'Segoe UI', Arial, sans-serif;
         }
         .cosmetics-list {
-            margin-top: 16px;
-        }
-        .cosmetic-row {
+            margin-top: 8px;
             display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 6px;
+            flex-wrap: wrap;
+            gap: 14px;
+            max-width: 400px;
         }
         .cosmetic {
             background: #23272a;
-            border-radius: 50%;
+            border-radius: 12px;
             box-shadow: 0 2px 8px #7289da55;
-            padding: 10px;
+            padding: 8px 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 54px;
-            height: 54px;
-            font-size: 2.1em;
+            font-size: 1.3em;
             border: 2px solid #43b58155;
             user-select: none;
             transition: transform 0.2s;
             position: relative;
+            color: #fff;
+            min-width: 44px;
+            max-width: 180px;
+            white-space: nowrap;
+            font-weight: 500;
+            gap: 8px;
+        }
+        .cosmetic .icon {
+            font-size: 1.6em;
+            margin-right: 7px;
         }
         .cosmetic:hover {
-            transform: scale(1.13) rotate(-6deg);
+            transform: scale(1.08) rotate(-3deg);
             box-shadow: 0 4px 16px #43b58199;
             border-color: #43b581;
-        }
-        .cosmetic[title]:hover:after {
-            content: attr(title);
-            position: absolute;
-            left: 50%;
-            bottom: -36px;
-            transform: translateX(-50%);
-            background: #23272a;
-            color: #fff;
-            padding: 5px 14px;
-            border-radius: 7px;
-            font-size: 1em;
-            white-space: nowrap;
-            box-shadow: 0 2px 8px #0008;
-            z-index: 10;
         }
         .notfound {
             color: #ff5555;
@@ -182,7 +193,7 @@
         <div class="subline">Suche nach Minecraft-Spielern und ihren Cosmetics!</div>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Minecraft Name...">
-            <button id="searchBtn">Suchen</button>
+            <button id="searchBtn" type="button">Suchen</button>
         </div>
         <div id="profileResult"></div>
         <div class="footer">
@@ -194,146 +205,110 @@
     const wolfProfiles = [
         {
             name: "BimsHingefallt",
-            avatar: "https://mc-heads.net/avatar/BimsHingefallt/92.png",
+            avatar: "https://mc-heads.net/avatar/BimsHingefallt/140.png",
             cosmetics: [
-                [
-                    { name: "1 Jahr Kuchen", icon: "🎂" },
-                    { name: "Wolf Ohren", icon: "🐺" }
-                ],
-                [
-                    { name: "Krone", icon: "👑" }
-                ],
-                [
-                    { name: "Brille", icon: "🕶️" }
-                ]
+                { name: "1 Jahr Kuchen", icon: "🎂" },
+                { name: "Wolf Ohren", icon: "🐺" },
+                { name: "Krone", icon: "👑" },
+                { name: "Brille", icon: "🕶️" }
             ]
         },
         {
             name: "MagicWolfMC",
-            avatar: "https://mc-heads.net/avatar/MagicWolfMC/92.png",
+            avatar: "https://mc-heads.net/avatar/MagicWolfMC/140.png",
             cosmetics: [
-                [
-                    { name: "1 Jahr Kuchen", icon: "🎂" },
-                    { name: "Wolf Cape", icon: "🧣" }
-                ],
-                [
-                    { name: "Wolf Ohren", icon: "🐺" }
-                ]
+                { name: "1 Jahr Kuchen", icon: "🎂" },
+                { name: "Wolf Cape", icon: "🧣" },
+                { name: "Wolf Ohren", icon: "🐺" }
             ]
         },
         {
             name: "Steve",
-            avatar: "https://mc-heads.net/avatar/Steve/92.png",
+            avatar: "https://mc-heads.net/avatar/Steve/140.png",
             cosmetics: [
-                [
-                    { name: "1 Jahr Kuchen", icon: "🎂" }
-                ],
-                [
-                    { name: "Classic Cape", icon: "🦸" }
-                ]
+                { name: "1 Jahr Kuchen", icon: "🎂" },
+                { name: "Classic Cape", icon: "🦸" }
             ]
         },
         {
             name: "NightwolfLG",
-            avatar: "https://mc-heads.net/avatar/NightwolfLG/92.png",
+            avatar: "https://mc-heads.net/avatar/NightwolfLG/140.png",
             cosmetics: [
-                [
-                    { name: "1 Jahr Kuchen", icon: "🎂" }, { name: "Wolf Ohren", icon: "🐺" }, { name: "Krone", icon: "👑" }
-                ],
-                [
-                    { name: "Brille", icon: "🕶️" }, { name: "Wolf Cape", icon: "🧣" }
-                ],
-                [
-                    { name: "Flügel", icon: "🪽" }, { name: "Krallenhandschuhe", icon: "🧤" }
-                ],
-                [
-                    { name: "Wolf Schwanz", icon: "🦊" }, { name: "Wolf Maske", icon: "🎭" }
-                ],
-                [
-                    { name: "Wolf Hoodie", icon: "🧥" }, { name: "Wolf Schuhe", icon: "👟" }
-                ],
-                [
-                    { name: "Wolf Rucksack", icon: "🎒" }, { name: "Wolf Brille", icon: "🕶️" }
-                ],
-                [
-                    { name: "Wolf Krone", icon: "👑" }, { name: "Wolf Umhang", icon: "🦺" }
-                ],
-                [
-                    { name: "Wolf Kette", icon: "📿" }, { name: "Wolf Ohrring", icon: "🦻" }
-                ],
-                [
-                    { name: "Wolf Ring", icon: "💍" }, { name: "Wolf Tattoo", icon: "🦁" }
-                ],
-                [
-                    { name: "Wolf Armband", icon: "📿" }, { name: "Wolf Stirnband", icon: "🎀" }
-                ],
-                [
-                    { name: "Wolf Cape Gold", icon: "🥇" }, { name: "Wolf Cape Silber", icon: "🥈" }, { name: "Wolf Cape Bronze", icon: "🥉" }
-                ],
-                [
-                    { name: "Wolf Krone Gold", icon: "👑" }, { name: "Wolf Krone Silber", icon: "👑" }
-                ]
+                { name: "1 Jahr Kuchen", icon: "🎂" },
+                { name: "Wolf Ohren", icon: "🐺" },
+                { name: "Krone", icon: "👑" },
+                { name: "Brille", icon: "🕶️" },
+                { name: "Wolf Cape", icon: "🧣" },
+                { name: "Flügel", icon: "🪽" },
+                { name: "Krallenhandschuhe", icon: "🧤" },
+                { name: "Wolf Schwanz", icon: "🦊" },
+                { name: "Wolf Maske", icon: "🎭" },
+                { name: "Wolf Hoodie", icon: "🧥" },
+                { name: "Wolf Schuhe", icon: "👟" },
+                { name: "Wolf Rucksack", icon: "🎒" },
+                { name: "Wolf Brille", icon: "🕶️" },
+                { name: "Wolf Krone", icon: "👑" },
+                { name: "Wolf Umhang", icon: "🦺" },
+                { name: "Wolf Kette", icon: "📿" },
+                { name: "Wolf Ohrring", icon: "🦻" },
+                { name: "Wolf Ring", icon: "💍" },
+                { name: "Wolf Tattoo", icon: "🦁" },
+                { name: "Wolf Armband", icon: "📿" },
+                { name: "Wolf Stirnband", icon: "🎀" },
+                { name: "Wolf Cape Gold", icon: "🥇" },
+                { name: "Wolf Cape Silber", icon: "🥈" },
+                { name: "Wolf Cape Bronze", icon: "🥉" },
+                { name: "Wolf Krone Gold", icon: "👑" },
+                { name: "Wolf Krone Silber", icon: "👑" }
             ]
         },
         {
             name: "DLS_GoldGeist",
-            avatar: "https://mc-heads.net/avatar/DLS_GoldGeist/92.png",
+            avatar: "https://mc-heads.net/avatar/DLS_GoldGeist/140.png",
             cosmetics: [
-                [
-                    { name: "1 Jahr Kuchen", icon: "🎂" }, { name: "Wolf Ohren", icon: "🐺" }, { name: "Krone", icon: "👑" }
-                ],
-                [
-                    { name: "Brille", icon: "🕶️" }, { name: "Wolf Cape", icon: "🧣" }
-                ],
-                [
-                    { name: "Flügel", icon: "🪽" }, { name: "Krallenhandschuhe", icon: "🧤" }
-                ],
-                [
-                    { name: "Wolf Schwanz", icon: "🦊" }, { name: "Wolf Maske", icon: "🎭" }
-                ],
-                [
-                    { name: "Wolf Hoodie", icon: "🧥" }, { name: "Wolf Schuhe", icon: "👟" }
-                ],
-                [
-                    { name: "Wolf Rucksack", icon: "🎒" }, { name: "Wolf Brille", icon: "🕶️" }
-                ],
-                [
-                    { name: "Wolf Krone", icon: "👑" }, { name: "Wolf Umhang", icon: "🦺" }
-                ],
-                [
-                    { name: "Wolf Kette", icon: "📿" }, { name: "Wolf Ohrring", icon: "🦻" }
-                ],
-                [
-                    { name: "Wolf Ring", icon: "💍" }, { name: "Wolf Tattoo", icon: "🦁" }
-                ],
-                [
-                    { name: "Wolf Armband", icon: "📿" }, { name: "Wolf Stirnband", icon: "🎀" }
-                ],
-                [
-                    { name: "Wolf Cape Gold", icon: "🥇" }, { name: "Wolf Cape Silber", icon: "🥈" }, { name: "Wolf Cape Bronze", icon: "🥉" }
-                ],
-                [
-                    { name: "Wolf Krone Gold", icon: "👑" }, { name: "Wolf Krone Silber", icon: "👑" }
-                ]
+                { name: "1 Jahr Kuchen", icon: "🎂" },
+                { name: "Wolf Ohren", icon: "🐺" },
+                { name: "Krone", icon: "👑" },
+                { name: "Brille", icon: "🕶️" },
+                { name: "Wolf Cape", icon: "🧣" },
+                { name: "Flügel", icon: "🪽" },
+                { name: "Krallenhandschuhe", icon: "🧤" },
+                { name: "Wolf Schwanz", icon: "🦊" },
+                { name: "Wolf Maske", icon: "🎭" },
+                { name: "Wolf Hoodie", icon: "🧥" },
+                { name: "Wolf Schuhe", icon: "👟" },
+                { name: "Wolf Rucksack", icon: "🎒" },
+                { name: "Wolf Brille", icon: "🕶️" },
+                { name: "Wolf Krone", icon: "👑" },
+                { name: "Wolf Umhang", icon: "🦺" },
+                { name: "Wolf Kette", icon: "📿" },
+                { name: "Wolf Ohrring", icon: "🦻" },
+                { name: "Wolf Ring", icon: "💍" },
+                { name: "Wolf Tattoo", icon: "🦁" },
+                { name: "Wolf Armband", icon: "📿" },
+                { name: "Wolf Stirnband", icon: "🎀" },
+                { name: "Wolf Cape Gold", icon: "🥇" },
+                { name: "Wolf Cape Silber", icon: "🥈" },
+                { name: "Wolf Cape Bronze", icon: "🥉" },
+                { name: "Wolf Krone Gold", icon: "👑" },
+                { name: "Wolf Krone Silber", icon: "👑" }
             ]
         },
         {
             name: "Alex",
-            avatar: "https://mc-heads.net/avatar/Alex/92.png",
+            avatar: "https://mc-heads.net/avatar/Alex/140.png",
             cosmetics: []
         },
         {
             name: "Player123",
-            avatar: "https://mc-heads.net/avatar/Player123/92.png",
+            avatar: "https://mc-heads.net/avatar/Player123/140.png",
             cosmetics: []
         },
         {
             name: "WolfFan",
-            avatar: "https://mc-heads.net/avatar/WolfFan/92.png",
+            avatar: "https://mc-heads.net/avatar/WolfFan/140.png",
             cosmetics: [
-                [
-                    { name: "1 Jahr Kuchen", icon: "🎂" }
-                ]
+                { name: "1 Jahr Kuchen", icon: "🎂" }
             ]
         }
     ];
@@ -342,30 +317,36 @@
         let cosmetics = "";
         if (profile.cosmetics && profile.cosmetics.length > 0) {
             cosmetics = `<div class="cosmetics-list">` +
-                profile.cosmetics.map(row =>
-                    `<div class="cosmetic-row">` +
-                    row.map(c => `<span class="cosmetic" title="${c.name}">${c.icon}</span>`).join("") +
-                    `</div>`
+                profile.cosmetics.map(c =>
+                    `<span class="cosmetic"><span class="icon">${c.icon}</span>${c.name}</span>`
                 ).join("") +
                 `</div>`;
         } else {
             cosmetics = `<div class="notfound"><b>${profile.name}</b> hat bisher keine Cosmetics.</div>`;
         }
         return `
-            <div class="profile-card">
-                <img class="avatar" src="${profile.avatar}" alt="Avatar von ${profile.name}">
-                <div class="mcname">${profile.name}</div>
-                ${cosmetics}
+            <div class="profile-row">
+                <div>
+                    <img class="avatar" src="${profile.avatar}" alt="Avatar von ${profile.name}">
+                </div>
+                <div class="profile-info">
+                    <div class="mcname">${profile.name}</div>
+                    ${cosmetics}
+                </div>
             </div>
         `;
     }
 
     function renderNotFound(name) {
         return `
-            <div class="profile-card">
-                <img class="avatar" src="https://mc-heads.net/avatar/${encodeURIComponent(name)}/92.png" alt="Avatar von ${name}">
-                <div class="mcname">${name}</div>
-                <div class="notfound"><b>${name}</b> hat bisher keine Cosmetics.</div>
+            <div class="profile-row">
+                <div>
+                    <img class="avatar" src="https://mc-heads.net/avatar/${encodeURIComponent(name)}/140.png" alt="Avatar von ${name}">
+                </div>
+                <div class="profile-info">
+                    <div class="mcname">${name}</div>
+                    <div class="notfound"><b>${name}</b> hat bisher keine Cosmetics.</div>
+                </div>
             </div>
         `;
     }
@@ -377,7 +358,9 @@
 
         if (!name) return;
 
-        const profile = wolfProfiles.find(p => p.name.toLowerCase() === name.toLowerCase());
+        const profile = wolfProfiles.find(function(p) {
+            return p.name.toLowerCase() === name.toLowerCase();
+        });
         if (!profile) {
             result.innerHTML = renderNotFound(name);
             return;
@@ -386,11 +369,11 @@
     }
 
     // Standardprofil anzeigen
-    window.addEventListener('DOMContentLoaded', function() {
-        const steve = wolfProfiles.find(p => p.name === "Steve");
+    document.addEventListener('DOMContentLoaded', function() {
+        const steve = wolfProfiles.find(function(p) { return p.name === "Steve"; });
         document.getElementById('profileResult').innerHTML = renderProfile(steve);
 
-        document.getElementById('searchBtn').addEventListener('click', searchProfile);
+        document.getElementById('searchBtn').onclick = searchProfile;
         document.getElementById('searchInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') searchProfile();
         });
