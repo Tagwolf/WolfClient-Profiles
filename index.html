@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WolfClient Profile Suche</title>
+    <title>WolfClient Profil-Finder</title>
+    <link rel="stylesheet" href="style.css">
     <style>
         body {
-            background: #23272a;
+            background: linear-gradient(120deg, #23272a 60%, #7289da 100%);
             color: #fff;
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
@@ -14,21 +15,32 @@
             min-height: 100vh;
         }
         .container {
-            max-width: 480px;
-            margin: 40px auto;
-            background: #2c2f33;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px #0008;
-            padding: 32px 24px 24px 24px;
+            max-width: 500px;
+            margin: 48px auto;
+            background: #23272aee;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px #000a;
+            padding: 36px 28px 28px 28px;
             text-align: center;
         }
-        h1 {
-            margin-top: 0;
-            font-size: 2em;
-            letter-spacing: 1px;
-            background: linear-gradient(90deg, #43b581 30%, #7289da 70%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .logo-wolf {
+            width: 80px;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 2px 12px #7289da88);
+        }
+        .headline {
+            font-size: 2.2em;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            color: #43b581;
+            text-shadow: 0 2px 12px #0008;
+            font-family: 'Segoe UI Black', 'Segoe UI', Arial, sans-serif;
+        }
+        .subline {
+            font-size: 1.1em;
+            color: #b9bbbe;
+            margin-bottom: 28px;
         }
         .search-bar {
             margin: 24px 0 32px 0;
@@ -37,38 +49,42 @@
             justify-content: center;
         }
         .search-bar input {
-            padding: 10px 14px;
-            border-radius: 8px;
+            padding: 12px 16px;
+            border-radius: 10px;
             border: none;
-            font-size: 1em;
-            width: 180px;
+            font-size: 1.1em;
+            width: 200px;
             background: #23272a;
             color: #fff;
             outline: none;
             box-shadow: 0 2px 8px #0003;
+            transition: box-shadow 0.2s;
+        }
+        .search-bar input:focus {
+            box-shadow: 0 4px 16px #7289da55;
         }
         .search-bar button {
-            padding: 10px 18px;
-            border-radius: 8px;
+            padding: 12px 22px;
+            border-radius: 10px;
             border: none;
-            background: #43b581;
+            background: linear-gradient(90deg, #43b581 60%, #7289da 100%);
             color: #fff;
             font-weight: bold;
-            font-size: 1em;
+            font-size: 1.1em;
             cursor: pointer;
             transition: background 0.2s, transform 0.2s;
         }
         .search-bar button:hover {
-            background: #7289da;
-            transform: scale(1.05);
+            background: linear-gradient(90deg, #7289da 60%, #43b581 100%);
+            transform: scale(1.07);
         }
         .profile-card {
-            background: #23272a;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px #7289da33;
-            padding: 24px 16px 16px 16px;
+            background: #2c2f33;
+            border-radius: 16px;
+            box-shadow: 0 2px 16px #7289da33;
+            padding: 28px 18px 18px 18px;
             margin: 0 auto 24px auto;
-            max-width: 340px;
+            max-width: 360px;
             animation: fadeIn 1s both;
         }
         @keyframes fadeIn {
@@ -76,40 +92,46 @@
             to { opacity: 1; transform: translateY(0);}
         }
         .avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 12px #43b58155;
+            width: 92px;
+            height: 92px;
+            border-radius: 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 16px #43b58155;
             background: #111;
             image-rendering: pixelated;
         }
         .mcname {
-            font-size: 1.3em;
-            color: #43b581;
-            font-weight: bold;
-            margin-bottom: 4px;
+            font-size: 1.6em;
+            color: #fff;
+            font-weight: 900;
+            margin-bottom: 2px;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #43b581 40%, #7289da 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 12px #0008;
+            font-family: 'Segoe UI Black', 'Segoe UI', Arial, sans-serif;
         }
         .cosmetics-list {
-            margin-top: 10px;
+            margin-top: 16px;
         }
         .cosmetic-row {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 4px;
+            gap: 12px;
+            margin-bottom: 6px;
         }
         .cosmetic {
             background: #23272a;
             border-radius: 50%;
             box-shadow: 0 2px 8px #7289da55;
-            padding: 8px;
+            padding: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 48px;
-            height: 48px;
-            font-size: 2em;
+            width: 54px;
+            height: 54px;
+            font-size: 2.1em;
             border: 2px solid #43b58155;
             user-select: none;
             transition: transform 0.2s;
@@ -124,13 +146,13 @@
             content: attr(title);
             position: absolute;
             left: 50%;
-            bottom: -32px;
+            bottom: -36px;
             transform: translateX(-50%);
             background: #23272a;
             color: #fff;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 0.95em;
+            padding: 5px 14px;
+            border-radius: 7px;
+            font-size: 1em;
             white-space: nowrap;
             box-shadow: 0 2px 8px #0008;
             z-index: 10;
@@ -140,166 +162,36 @@
             margin-top: 24px;
             font-size: 1.1em;
         }
+        .footer {
+            margin-top: 32px;
+            color: #b9bbbe;
+            font-size: 0.98em;
+        }
+        .footer a {
+            color: #7289da;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>WolfClient Profile Suche</h1>
+        <img class="logo-wolf" src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="WolfClient Logo">
+        <div class="headline">WolfClient Profil-Finder</div>
+        <div class="subline">Suche nach Minecraft-Spielern und ihren Cosmetics!</div>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Minecraft Name...">
             <button id="searchBtn">Suchen</button>
         </div>
         <div id="profileResult"></div>
+        <div class="footer">
+            <p>WolfClient &copy; 2025 | <a href="https://zeppelino.de/impressum">Impressum</a> & <a href="https://zeppelino.de/datenschutz">Datenschutz</a></p>
+        </div>
     </div>
+    <script src="spieler.js"></script>
     <script>
-    // Beispiel-Datenbank
-    const wolfProfiles = [
-        {
-            name: "BimsHingefallt",
-            avatar: "https://mc-heads.net/avatar/BimsHingefallt/80.png",
-            cosmetics: [
-                [
-                    { name: "1 Jahr Kuchen", icon: "🎂" },
-                    { name: "Wolf Ohren", icon: "🐺" }
-                ],
-                [
-                    { name: "Krone", icon: "👑" }
-                ],
-                [
-                    { name: "Brille", icon: "🕶️" }
-                ]
-            ]
-        },
-        {
-            name: "MagicWolfMC",
-            avatar: "https://mc-heads.net/avatar/MagicWolfMC/80.png",
-            cosmetics: [
-                [
-                    { name: "1 Jahr Kuchen", icon: "🎂" },
-                    { name: "Wolf Cape", icon: "🧣" }
-                ],
-                [
-                    { name: "Wolf Ohren", icon: "🐺" }
-                ]
-            ]
-        },
-        {
-            name: "Steve",
-            avatar: "https://mc-heads.net/avatar/Steve/80.png",
-            cosmetics: [
-                [
-                    { name: "1 Jahr Kuchen", icon: "🎂" }
-                ],
-                [
-                    { name: "Classic Cape", icon: "🦸" }
-                ]
-            ]
-        },
-        {
-            name: "NightwolfLG",
-            avatar: "https://mc-heads.net/avatar/NightwolfLG/80.png",
-            cosmetics: [
-                [
-                    { name: "1 Jahr Kuchen", icon: "🎂" }, { name: "Wolf Ohren", icon: "🐺" }, { name: "Krone", icon: "👑" }
-                ],
-                [
-                    { name: "Brille", icon: "🕶️" }, { name: "Wolf Cape", icon: "🧣" }
-                ],
-                [
-                    { name: "Flügel", icon: "🪽" }, { name: "Krallenhandschuhe", icon: "🧤" }
-                ],
-                [
-                    { name: "Wolf Schwanz", icon: "🦊" }, { name: "Wolf Maske", icon: "🎭" }
-                ],
-                [
-                    { name: "Wolf Hoodie", icon: "🧥" }, { name: "Wolf Schuhe", icon: "👟" }
-                ],
-                [
-                    { name: "Wolf Rucksack", icon: "🎒" }, { name: "Wolf Brille", icon: "🕶️" }
-                ],
-                [
-                    { name: "Wolf Krone", icon: "👑" }, { name: "Wolf Umhang", icon: "🦺" }
-                ],
-                [
-                    { name: "Wolf Kette", icon: "📿" }, { name: "Wolf Ohrring", icon: "🦻" }
-                ],
-                [
-                    { name: "Wolf Ring", icon: "💍" }, { name: "Wolf Tattoo", icon: "🦁" }
-                ],
-                [
-                    { name: "Wolf Armband", icon: "📿" }, { name: "Wolf Stirnband", icon: "🎀" }
-                ],
-                [
-                    { name: "Wolf Cape Gold", icon: "🥇" }, { name: "Wolf Cape Silber", icon: "🥈" }, { name: "Wolf Cape Bronze", icon: "🥉" }
-                ],
-                [
-                    { name: "Wolf Krone Gold", icon: "👑" }, { name: "Wolf Krone Silber", icon: "👑" }
-                ]
-            ]
-        },
-        {
-            name: "DLS_GoldGeist",
-            avatar: "https://mc-heads.net/avatar/DLS_GoldGeist/80.png",
-            cosmetics: [
-                [
-                    { name: "1 Jahr Kuchen", icon: "🎂" }, { name: "Wolf Ohren", icon: "🐺" }, { name: "Krone", icon: "👑" }
-                ],
-                [
-                    { name: "Brille", icon: "🕶️" }, { name: "Wolf Cape", icon: "🧣" }
-                ],
-                [
-                    { name: "Flügel", icon: "🪽" }, { name: "Krallenhandschuhe", icon: "🧤" }
-                ],
-                [
-                    { name: "Wolf Schwanz", icon: "🦊" }, { name: "Wolf Maske", icon: "🎭" }
-                ],
-                [
-                    { name: "Wolf Hoodie", icon: "🧥" }, { name: "Wolf Schuhe", icon: "👟" }
-                ],
-                [
-                    { name: "Wolf Rucksack", icon: "🎒" }, { name: "Wolf Brille", icon: "🕶️" }
-                ],
-                [
-                    { name: "Wolf Krone", icon: "👑" }, { name: "Wolf Umhang", icon: "🦺" }
-                ],
-                [
-                    { name: "Wolf Kette", icon: "📿" }, { name: "Wolf Ohrring", icon: "🦻" }
-                ],
-                [
-                    { name: "Wolf Ring", icon: "💍" }, { name: "Wolf Tattoo", icon: "🦁" }
-                ],
-                [
-                    { name: "Wolf Armband", icon: "📿" }, { name: "Wolf Stirnband", icon: "🎀" }
-                ],
-                [
-                    { name: "Wolf Cape Gold", icon: "🥇" }, { name: "Wolf Cape Silber", icon: "🥈" }, { name: "Wolf Cape Bronze", icon: "🥉" }
-                ],
-                [
-                    { name: "Wolf Krone Gold", icon: "👑" }, { name: "Wolf Krone Silber", icon: "👑" }
-                ]
-            ]
-        },
-        {
-            name: "Alex",
-            avatar: "https://mc-heads.net/avatar/Alex/80.png",
-            cosmetics: []
-        },
-        {
-            name: "Player123",
-            avatar: "https://mc-heads.net/avatar/Player123/80.png",
-            cosmetics: []
-        },
-        {
-            name: "WolfFan",
-            avatar: "https://mc-heads.net/avatar/WolfFan/80.png",
-            cosmetics: [
-                [
-                    { name: "1 Jahr Kuchen", icon: "🎂" }
-                ]
-            ]
-        }
-    ];
-
     function searchProfile() {
         const name = document.getElementById('searchInput').value.trim();
         const result = document.getElementById('profileResult');
@@ -307,9 +199,15 @@
 
         if (!name) return;
 
-        const profile = wolfProfiles.find(p => p.name.toLowerCase() === name.toLowerCase());
+        const profile = window.wolfProfiles.find(p => p.name.toLowerCase() === name.toLowerCase());
         if (!profile) {
-            result.innerHTML = `<div class="notfound">Kein Profil gefunden für <b>${name}</b>.</div>`;
+            result.innerHTML = `
+                <div class="profile-card">
+                    <img class="avatar" src="https://mc-heads.net/avatar/${encodeURIComponent(name)}/92.png" alt="Avatar von ${name}">
+                    <div class="mcname">${name}</div>
+                    <div class="notfound"><b>${name}</b> hat bisher keine Cosmetics.</div>
+                </div>
+            `;
             return;
         }
 
@@ -337,4 +235,32 @@
 
     document.getElementById('searchBtn').addEventListener('click', searchProfile);
     document.getElementById('searchInput').addEventListener('keydown', function(e) {
-        if
+        if (e.key === 'Enter') searchProfile();
+    });
+
+    // Standardprofil anzeigen
+    window.addEventListener('DOMContentLoaded', function() {
+        const steve = window.wolfProfiles.find(p => p.name === "Steve");
+        let cosmetics = "";
+        if (steve.cosmetics && steve.cosmetics.length > 0) {
+            cosmetics = `<div class="cosmetics-list">` +
+                steve.cosmetics.map(row =>
+                    `<div class="cosmetic-row">` +
+                    row.map(c => `<span class="cosmetic" title="${c.name}">${c.icon}</span>`).join("") +
+                    `</div>`
+                ).join("") +
+                `</div>`;
+        } else {
+            cosmetics = `<div class="notfound"><b>Steve</b> hat bisher keine Cosmetics.</div>`;
+        }
+        document.getElementById('profileResult').innerHTML = `
+            <div class="profile-card">
+                <img class="avatar" src="${steve.avatar}" alt="Avatar von Steve">
+                <div class="mcname">Steve</div>
+                ${cosmetics}
+            </div>
+        `;
+    });
+    </script>
+</body>
+</html>
