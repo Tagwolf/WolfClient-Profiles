@@ -189,9 +189,155 @@
             <p>WolfClient &copy; 2025 | <a href="https://zeppelino.de/impressum">Impressum</a> & <a href="https://zeppelino.de/datenschutz">Datenschutz</a></p>
         </div>
     </div>
-    <script src="spieler.js"></script>
     <script>
-    // Warten bis die Profile geladen sind
+    // Die komplette Spieler-Liste in JS:
+    const wolfProfiles = [
+        {
+            name: "BimsHingefallt",
+            avatar: "https://mc-heads.net/avatar/BimsHingefallt/92.png",
+            cosmetics: [
+                [
+                    { name: "1 Jahr Kuchen", icon: "🎂" },
+                    { name: "Wolf Ohren", icon: "🐺" }
+                ],
+                [
+                    { name: "Krone", icon: "👑" }
+                ],
+                [
+                    { name: "Brille", icon: "🕶️" }
+                ]
+            ]
+        },
+        {
+            name: "MagicWolfMC",
+            avatar: "https://mc-heads.net/avatar/MagicWolfMC/92.png",
+            cosmetics: [
+                [
+                    { name: "1 Jahr Kuchen", icon: "🎂" },
+                    { name: "Wolf Cape", icon: "🧣" }
+                ],
+                [
+                    { name: "Wolf Ohren", icon: "🐺" }
+                ]
+            ]
+        },
+        {
+            name: "Steve",
+            avatar: "https://mc-heads.net/avatar/Steve/92.png",
+            cosmetics: [
+                [
+                    { name: "1 Jahr Kuchen", icon: "🎂" }
+                ],
+                [
+                    { name: "Classic Cape", icon: "🦸" }
+                ]
+            ]
+        },
+        {
+            name: "NightwolfLG",
+            avatar: "https://mc-heads.net/avatar/NightwolfLG/92.png",
+            cosmetics: [
+                [
+                    { name: "1 Jahr Kuchen", icon: "🎂" }, { name: "Wolf Ohren", icon: "🐺" }, { name: "Krone", icon: "👑" }
+                ],
+                [
+                    { name: "Brille", icon: "🕶️" }, { name: "Wolf Cape", icon: "🧣" }
+                ],
+                [
+                    { name: "Flügel", icon: "🪽" }, { name: "Krallenhandschuhe", icon: "🧤" }
+                ],
+                [
+                    { name: "Wolf Schwanz", icon: "🦊" }, { name: "Wolf Maske", icon: "🎭" }
+                ],
+                [
+                    { name: "Wolf Hoodie", icon: "🧥" }, { name: "Wolf Schuhe", icon: "👟" }
+                ],
+                [
+                    { name: "Wolf Rucksack", icon: "🎒" }, { name: "Wolf Brille", icon: "🕶️" }
+                ],
+                [
+                    { name: "Wolf Krone", icon: "👑" }, { name: "Wolf Umhang", icon: "🦺" }
+                ],
+                [
+                    { name: "Wolf Kette", icon: "📿" }, { name: "Wolf Ohrring", icon: "🦻" }
+                ],
+                [
+                    { name: "Wolf Ring", icon: "💍" }, { name: "Wolf Tattoo", icon: "🦁" }
+                ],
+                [
+                    { name: "Wolf Armband", icon: "📿" }, { name: "Wolf Stirnband", icon: "🎀" }
+                ],
+                [
+                    { name: "Wolf Cape Gold", icon: "🥇" }, { name: "Wolf Cape Silber", icon: "🥈" }, { name: "Wolf Cape Bronze", icon: "🥉" }
+                ],
+                [
+                    { name: "Wolf Krone Gold", icon: "👑" }, { name: "Wolf Krone Silber", icon: "👑" }
+                ]
+            ]
+        },
+        {
+            name: "DLS_GoldGeist",
+            avatar: "https://mc-heads.net/avatar/DLS_GoldGeist/92.png",
+            cosmetics: [
+                [
+                    { name: "1 Jahr Kuchen", icon: "🎂" }, { name: "Wolf Ohren", icon: "🐺" }, { name: "Krone", icon: "👑" }
+                ],
+                [
+                    { name: "Brille", icon: "🕶️" }, { name: "Wolf Cape", icon: "🧣" }
+                ],
+                [
+                    { name: "Flügel", icon: "🪽" }, { name: "Krallenhandschuhe", icon: "🧤" }
+                ],
+                [
+                    { name: "Wolf Schwanz", icon: "🦊" }, { name: "Wolf Maske", icon: "🎭" }
+                ],
+                [
+                    { name: "Wolf Hoodie", icon: "🧥" }, { name: "Wolf Schuhe", icon: "👟" }
+                ],
+                [
+                    { name: "Wolf Rucksack", icon: "🎒" }, { name: "Wolf Brille", icon: "🕶️" }
+                ],
+                [
+                    { name: "Wolf Krone", icon: "👑" }, { name: "Wolf Umhang", icon: "🦺" }
+                ],
+                [
+                    { name: "Wolf Kette", icon: "📿" }, { name: "Wolf Ohrring", icon: "🦻" }
+                ],
+                [
+                    { name: "Wolf Ring", icon: "💍" }, { name: "Wolf Tattoo", icon: "🦁" }
+                ],
+                [
+                    { name: "Wolf Armband", icon: "📿" }, { name: "Wolf Stirnband", icon: "🎀" }
+                ],
+                [
+                    { name: "Wolf Cape Gold", icon: "🥇" }, { name: "Wolf Cape Silber", icon: "🥈" }, { name: "Wolf Cape Bronze", icon: "🥉" }
+                ],
+                [
+                    { name: "Wolf Krone Gold", icon: "👑" }, { name: "Wolf Krone Silber", icon: "👑" }
+                ]
+            ]
+        },
+        {
+            name: "Alex",
+            avatar: "https://mc-heads.net/avatar/Alex/92.png",
+            cosmetics: []
+        },
+        {
+            name: "Player123",
+            avatar: "https://mc-heads.net/avatar/Player123/92.png",
+            cosmetics: []
+        },
+        {
+            name: "WolfFan",
+            avatar: "https://mc-heads.net/avatar/WolfFan/92.png",
+            cosmetics: [
+                [
+                    { name: "1 Jahr Kuchen", icon: "🎂" }
+                ]
+            ]
+        }
+    ];
+
     function renderProfile(profile) {
         let cosmetics = "";
         if (profile.cosmetics && profile.cosmetics.length > 0) {
@@ -231,13 +377,7 @@
 
         if (!name) return;
 
-        // wolfProfiles muss geladen sein!
-        if (!window.wolfProfiles) {
-            result.innerHTML = `<div class="notfound">Spielerliste wird geladen...</div>`;
-            return;
-        }
-
-        const profile = window.wolfProfiles.find(p => p.name.toLowerCase() === name.toLowerCase());
+        const profile = wolfProfiles.find(p => p.name.toLowerCase() === name.toLowerCase());
         if (!profile) {
             result.innerHTML = renderNotFound(name);
             return;
@@ -245,18 +385,10 @@
         result.innerHTML = renderProfile(profile);
     }
 
-    // Event Listener erst nach DOMContentLoaded und nach Laden von spieler.js!
+    // Standardprofil anzeigen
     window.addEventListener('DOMContentLoaded', function() {
-        // Standardprofil anzeigen
-        function showDefault() {
-            if (!window.wolfProfiles) {
-                setTimeout(showDefault, 100); // Retry until loaded
-                return;
-            }
-            const steve = window.wolfProfiles.find(p => p.name === "Steve");
-            document.getElementById('profileResult').innerHTML = renderProfile(steve);
-        }
-        showDefault();
+        const steve = wolfProfiles.find(p => p.name === "Steve");
+        document.getElementById('profileResult').innerHTML = renderProfile(steve);
 
         document.getElementById('searchBtn').addEventListener('click', searchProfile);
         document.getElementById('searchInput').addEventListener('keydown', function(e) {
