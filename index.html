@@ -2,8 +2,8 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WolfClient Profile Suche</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body {
             background: #23272a;
@@ -90,11 +90,6 @@
             font-weight: bold;
             margin-bottom: 4px;
         }
-        .oldnames {
-            color: #b9bbbe;
-            font-size: 0.98em;
-            margin-bottom: 10px;
-        }
         .cosmetics-list {
             margin-top: 10px;
         }
@@ -118,11 +113,27 @@
             border: 2px solid #43b58155;
             user-select: none;
             transition: transform 0.2s;
+            position: relative;
         }
         .cosmetic:hover {
             transform: scale(1.13) rotate(-6deg);
             box-shadow: 0 4px 16px #43b58199;
             border-color: #43b581;
+        }
+        .cosmetic[title]:hover:after {
+            content: attr(title);
+            position: absolute;
+            left: 50%;
+            bottom: -32px;
+            transform: translateX(-50%);
+            background: #23272a;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.95em;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px #0008;
+            z-index: 10;
         }
         .notfound {
             color: #ff5555;
@@ -156,11 +167,6 @@
                 return;
             }
 
-            let oldNames = "";
-            if (profile.oldNames && profile.oldNames.length > 0) {
-                oldNames = `<div class="oldnames">Frühere Namen: ${profile.oldNames.join(", ")}</div>`;
-            }
-
             let cosmetics = "";
             if (profile.cosmetics && profile.cosmetics.length > 0) {
                 cosmetics = `<div class="cosmetics-list">` +
@@ -178,7 +184,6 @@
                 <div class="profile-card">
                     <img class="avatar" src="${profile.avatar}" alt="Avatar von ${profile.name}">
                     <div class="mcname">${profile.name}</div>
-                    ${oldNames}
                     ${cosmetics}
                 </div>
             `;
