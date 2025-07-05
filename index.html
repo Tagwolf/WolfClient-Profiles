@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WolfClient Profil-Finder</title>
     <script src="https://cdn.jsdelivr.net/npm/skinview3d@3.0.0/bundles/skinview3d.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/examples/js/loaders/ObjectLoader.js"></script>
     <style>
         body {
             background: linear-gradient(120deg, #23272a 60%, #7289da 100%);
@@ -15,7 +17,7 @@
             min-height: 100vh;
         }
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 48px auto;
             background: #23272aee;
             border-radius: 20px;
@@ -82,49 +84,82 @@
             display: flex;
             flex-direction: row;
             align-items: flex-start;
-            justify-content: center;
-            gap: 40px;
+            justify-content: flex-start;
+            gap: 100px;
             margin: 0 auto 24px auto;
-            max-width: 800px;
+            max-width: 1100px;
             background: #2c2f33;
             border-radius: 16px;
             box-shadow: 0 2px 16px #7289da33;
-            padding: 32px 24px;
-            animation: fadeIn 1s both;
+            padding: 50px 50px 50px 50px;
+            animation: fadeIn 0.7s both;
+            position: relative;
         }
-        @media (max-width: 700px) {
+        @media (max-width: 1200px) {
             .profile-row {
                 flex-direction: column;
                 align-items: center;
+                gap: 24px;
                 padding: 18px 8px;
             }
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(24px);}
-            to { opacity: 1; transform: translateY(0);}
+            from { opacity: 0; transform: scale(0.95);}
+            to { opacity: 1; transform: scale(1);}
+        }
+        .skin-side, .cosmetic-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-width: 240px;
+            max-width: 320px;
+            position: relative;
+        }
+        .skin-side {
+            align-items: flex-start;
+            margin-right: 60px;
+        }
+        .cosmetic-side {
+            align-items: flex-end;
+            margin-left: 60px;
+        }
+        .skinviewer-wrapper {
+            position: relative;
+            width: 240px;
+            height: 240px;
+            margin-bottom: 10px;
         }
         .skinviewer-canvas {
-            width: 140px;
-            height: 140px;
-            border-radius: 18px;
-            margin-bottom: 14px;
+            width: 240px;
+            height: 240px;
+            border-radius: 16px;
             background: #111;
             box-shadow: 0 2px 16px #43b58155;
             display: block;
         }
-        .profile-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: flex-start;
-            min-width: 220px;
-            max-width: 260px;
+        .skin-3d-name {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(44,47,51,0.85);
+            color: #fff;
+            font-size: 1em;
+            font-family: 'Minecraftia', 'Segoe UI', Arial, sans-serif;
+            padding: 2px 10px;
+            border-radius: 8px;
+            letter-spacing: 1px;
+            font-weight: bold;
+            text-shadow: 0 2px 8px #000a;
+            pointer-events: none;
+            border: 2px solid #43b58155;
         }
         .mcname {
-            font-size: 2em;
+            font-size: 1.3em;
             color: #fff;
             font-weight: 900;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
             letter-spacing: 1px;
             background: linear-gradient(90deg, #43b581 40%, #7289da 100%);
             -webkit-background-clip: text;
@@ -132,46 +167,43 @@
             text-shadow: 0 2px 12px #0008;
             font-family: 'Segoe UI Black', 'Segoe UI', Arial, sans-serif;
         }
-        .cosmetics-list {
-            margin-top: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 14px;
-            max-width: 400px;
-        }
-        .cosmetic {
+        .rang {
+            font-size: 1.15em;
+            font-weight: bold;
+            margin-bottom: 18px;
+            padding: 4px 18px;
+            border-radius: 10px;
+            display: inline-block;
             background: #23272a;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px #7289da55;
-            padding: 8px 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3em;
             border: 2px solid #43b58155;
-            user-select: none;
-            transition: transform 0.2s;
-            position: relative;
-            color: #fff;
-            min-width: 44px;
-            max-width: 180px;
-            white-space: nowrap;
-            font-weight: 500;
-            gap: 8px;
         }
-        .cosmetic .icon {
-            font-size: 1.6em;
-            margin-right: 7px;
-        }
-        .cosmetic:hover {
-            transform: scale(1.08) rotate(-3deg);
-            box-shadow: 0 4px 16px #43b58199;
-            border-color: #43b581;
+        .rang.owner { background: linear-gradient(90deg,#ffb347,#ff5252); color: #fff; border: none;}
+        .rang.freund { background: linear-gradient(90deg,#43b581,#7289da); color: #fff; border: none;}
+        .rang.streamer { background: linear-gradient(90deg,#a970ff,#43b581); color: #fff; border: none;}
+        .cosmetic-title {
+            font-size: 2em;
+            color: #43b581;
+            margin-bottom: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            position: absolute;
+            top: -58px;
+            right: 0;
+            background: none;
         }
         .notfound {
             color: #ff5555;
             margin-top: 24px;
-            font-size: 1.1em;
+            font-size: 1.2em;
+        }
+        .cosmetic-viewer {
+            width: 200px;
+            height: 200px;
+            border-radius: 14px;
+            background: #111;
+            box-shadow: 0 2px 18px #43b58155;
+            display: block;
+            margin-bottom: 10px;
         }
         .footer {
             margin-top: 32px;
@@ -185,7 +217,18 @@
         .footer a:hover {
             text-decoration: underline;
         }
+        #profileResult {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 220px;
+        }
+        .hidden {
+            display: none !important;
+        }
     </style>
+    <!-- Optional: Minecraft Font für den Namen -->
+    <link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -196,143 +239,62 @@
             <input type="text" id="searchInput" placeholder="Minecraft Name...">
             <button id="searchBtn" type="button">Suchen</button>
         </div>
-        <div id="profileResult"></div>
+        <div id="profileResult" class="hidden"></div>
         <div class="footer">
             <p>WolfClient &copy; 2025 | <a href="https://zeppelino.de/impressum">Impressum</a> & <a href="https://zeppelino.de/datenschutz">Datenschutz</a></p>
         </div>
     </div>
     <script>
-    // Die komplette Spieler-Liste in JS:
+    // Cosmetic-Definition (nur bestimmte Spieler haben das Cosmetic)
+    const cosmetic = {
+        name: "Fishing Hat",
+        model: "01_fishing_hat.json",
+        texture: "01_fishing_hat.png"
+    };
+
+    // Spieler-Liste mit Rängen und Cosmetics
     const wolfProfiles = [
-        {
-            name: "BimsHingefallt",
-            skin: "https://mc-heads.net/skin/BimsHingefallt",
-            cosmetics: [
-                { name: "1 Jahr Kuchen", icon: "🎂" },
-                { name: "Wolf Ohren", icon: "🐺" },
-                { name: "Krone", icon: "👑" },
-                { name: "Brille", icon: "🕶️" }
-            ]
-        },
-        {
-            name: "MagicWolfMC",
-            skin: "https://mc-heads.net/skin/MagicWolfMC",
-            cosmetics: [
-                { name: "1 Jahr Kuchen", icon: "🎂" },
-                { name: "Wolf Cape", icon: "🧣" },
-                { name: "Wolf Ohren", icon: "🐺" }
-            ]
-        },
-        {
-            name: "Steve",
-            skin: "https://mc-heads.net/skin/Steve",
-            cosmetics: [
-                { name: "1 Jahr Kuchen", icon: "🎂" },
-                { name: "Classic Cape", icon: "🦸" }
-            ]
-        },
-        {
-            name: "NightwolfLG",
-            skin: "https://mc-heads.net/skin/NightwolfLG",
-            cosmetics: [
-                { name: "1 Jahr Kuchen", icon: "🎂" },
-                { name: "Wolf Ohren", icon: "🐺" },
-                { name: "Krone", icon: "👑" },
-                { name: "Brille", icon: "🕶️" },
-                { name: "Wolf Cape", icon: "🧣" },
-                { name: "Flügel", icon: "🪽" },
-                { name: "Krallenhandschuhe", icon: "🧤" },
-                { name: "Wolf Schwanz", icon: "🦊" },
-                { name: "Wolf Maske", icon: "🎭" },
-                { name: "Wolf Hoodie", icon: "🧥" },
-                { name: "Wolf Schuhe", icon: "👟" },
-                { name: "Wolf Rucksack", icon: "🎒" },
-                { name: "Wolf Brille", icon: "🕶️" },
-                { name: "Wolf Krone", icon: "👑" },
-                { name: "Wolf Umhang", icon: "🦺" },
-                { name: "Wolf Kette", icon: "📿" },
-                { name: "Wolf Ohrring", icon: "🦻" },
-                { name: "Wolf Ring", icon: "💍" },
-                { name: "Wolf Tattoo", icon: "🦁" },
-                { name: "Wolf Armband", icon: "📿" },
-                { name: "Wolf Stirnband", icon: "🎀" },
-                { name: "Wolf Cape Gold", icon: "🥇" },
-                { name: "Wolf Cape Silber", icon: "🥈" },
-                { name: "Wolf Cape Bronze", icon: "🥉" },
-                { name: "Wolf Krone Gold", icon: "👑" },
-                { name: "Wolf Krone Silber", icon: "👑" }
-            ]
-        },
-        {
-            name: "DLS_GoldGeist",
-            skin: "https://mc-heads.net/skin/DLS_GoldGeist",
-            cosmetics: [
-                { name: "1 Jahr Kuchen", icon: "🎂" },
-                { name: "Wolf Ohren", icon: "🐺" },
-                { name: "Krone", icon: "👑" },
-                { name: "Brille", icon: "🕶️" },
-                { name: "Wolf Cape", icon: "🧣" },
-                { name: "Flügel", icon: "🪽" },
-                { name: "Krallenhandschuhe", icon: "🧤" },
-                { name: "Wolf Schwanz", icon: "🦊" },
-                { name: "Wolf Maske", icon: "🎭" },
-                { name: "Wolf Hoodie", icon: "🧥" },
-                { name: "Wolf Schuhe", icon: "👟" },
-                { name: "Wolf Rucksack", icon: "🎒" },
-                { name: "Wolf Brille", icon: "🕶️" },
-                { name: "Wolf Krone", icon: "👑" },
-                { name: "Wolf Umhang", icon: "🦺" },
-                { name: "Wolf Kette", icon: "📿" },
-                { name: "Wolf Ohrring", icon: "🦻" },
-                { name: "Wolf Ring", icon: "💍" },
-                { name: "Wolf Tattoo", icon: "🦁" },
-                { name: "Wolf Armband", icon: "📿" },
-                { name: "Wolf Stirnband", icon: "🎀" },
-                { name: "Wolf Cape Gold", icon: "🥇" },
-                { name: "Wolf Cape Silber", icon: "🥈" },
-                { name: "Wolf Cape Bronze", icon: "🥉" },
-                { name: "Wolf Krone Gold", icon: "👑" },
-                { name: "Wolf Krone Silber", icon: "👑" }
-            ]
-        },
-        {
-            name: "Alex",
-            skin: "https://mc-heads.net/skin/Alex",
-            cosmetics: []
-        },
-        {
-            name: "Player123",
-            skin: "https://mc-heads.net/skin/Player123",
-            cosmetics: []
-        },
-        {
-            name: "WolfFan",
-            skin: "https://mc-heads.net/skin/WolfFan",
-            cosmetics: [
-                { name: "1 Jahr Kuchen", icon: "🎂" }
-            ]
-        }
+        { name: "NightwolfLG", skin: "https://mc-heads.net/skin/NightwolfLG", rang: "Owner", cosmetic: true },
+        { name: "dcue", skin: "https://mc-heads.net/skin/dcue", rang: "Freund", cosmetic: true },
+        { name: "IchGeOOC", skin: "https://mc-heads.net/skin/IchGeOOC", rang: "Freund", cosmetic: true },
+        { name: "Takatunga", skin: "https://mc-heads.net/skin/Takatunga", rang: "Streamer", cosmetic: true },
+        // Restliche Spieler ohne Cosmetic
+        { name: "BimsHingefallt", skin: "https://mc-heads.net/skin/BimsHingefallt" },
+        { name: "MagicWolfMC", skin: "https://mc-heads.net/skin/MagicWolfMC" },
+        { name: "Steve", skin: "https://mc-heads.net/skin/Steve" },
+        { name: "DLS_GoldGeist", skin: "https://mc-heads.net/skin/DLS_GoldGeist" },
+        { name: "Alex", skin: "https://mc-heads.net/skin/Alex" },
+        { name: "Player123", skin: "https://mc-heads.net/skin/Player123" },
+        { name: "WolfFan", skin: "https://mc-heads.net/skin/WolfFan" }
     ];
 
+    function getRangClass(rang) {
+        if (!rang) return "";
+        if (rang.toLowerCase() === "owner") return "owner";
+        if (rang.toLowerCase() === "freund") return "freund";
+        if (rang.toLowerCase() === "streamer") return "streamer";
+        return "";
+    }
+
     function renderProfile(profile) {
-        let cosmetics = "";
-        if (profile.cosmetics && profile.cosmetics.length > 0) {
-            cosmetics = `<div class="cosmetics-list">` +
-                profile.cosmetics.map(c =>
-                    `<span class="cosmetic"><span class="icon">${c.icon}</span>${c.name}</span>`
-                ).join("") +
-                `</div>`;
-        } else {
-            cosmetics = `<div class="notfound"><b>${profile.name}</b> hat bisher keine Cosmetics.</div>`;
-        }
+        const skinId = `skinviewer-canvas-${profile.name}`;
+        const cosmeticId = `cosmeticViewer-${profile.name}`;
         return `
             <div class="profile-row">
-                <div>
-                    <canvas id="skinviewer-canvas" class="skinviewer-canvas" width="140" height="140"></canvas>
-                </div>
-                <div class="profile-info">
+                <div class="skin-side">
+                    <div class="skinviewer-wrapper">
+                        <span class="skin-3d-name">${profile.name}</span>
+                        <canvas id="${skinId}" class="skinviewer-canvas" width="240" height="240"></canvas>
+                    </div>
                     <div class="mcname">${profile.name}</div>
-                    ${cosmetics}
+                    ${profile.rang ? `<div class="rang ${getRangClass(profile.rang)}">${profile.rang}</div>` : ""}
+                </div>
+                <div class="cosmetic-side">
+                    <div class="cosmetic-title">Cosmetics</div>
+                    ${profile.cosmetic
+                        ? `<canvas id="${cosmeticId}" class="cosmetic-viewer" width="200" height="200"></canvas>`
+                        : `<div class="notfound"><b>${profile.name}</b> hat noch keine Cosmetics.</div>`
+                    }
                 </div>
             </div>
         `;
@@ -341,27 +303,79 @@
     function renderNotFound(name) {
         return `
             <div class="profile-row">
-                <div>
-                    <canvas id="skinviewer-canvas" class="skinviewer-canvas" width="140" height="140"></canvas>
-                </div>
-                <div class="profile-info">
+                <div class="skin-side">
+                    <div class="skinviewer-wrapper">
+                        <span class="skin-3d-name">${name}</span>
+                        <canvas id="skinviewer-canvas-notfound" class="skinviewer-canvas" width="240" height="240"></canvas>
+                    </div>
                     <div class="mcname">${name}</div>
-                    <div class="notfound"><b>${name}</b> hat bisher keine Cosmetics.</div>
+                </div>
+                <div class="cosmetic-side">
+                    <div class="cosmetic-title">Cosmetics</div>
+                    <div class="notfound"><b>${name}</b> hat noch keine Cosmetics.</div>
                 </div>
             </div>
         `;
     }
 
-    function showSkinViewer(skinUrl) {
-        const canvas = document.getElementById("skinviewer-canvas");
+    function showCosmeticViewer(canvasId, modelPath, texturePath) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        // THREE.js Setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
+        camera.position.set(0, 1, 6);
+
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        renderer.setClearColor(0x000000, 0);
+
+        // Licht
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+        dirLight.position.set(5, 10, 7);
+        scene.add(dirLight);
+
+        // Modell laden
+        const loader = new THREE.ObjectLoader();
+        loader.load(modelPath, function (obj) {
+            // Textur laden
+            const texture = new THREE.TextureLoader().load(texturePath, function() {
+                obj.traverse(function (child) {
+                    if (child.isMesh) {
+                        child.material.map = texture;
+                        child.material.needsUpdate = true;
+                    }
+                });
+                obj.position.y = 0;
+                obj.scale.set(1.2, 1.2, 1.2);
+                scene.add(obj);
+            });
+        });
+
+        // Animation (Rotation)
+        function animate() {
+            requestAnimationFrame(animate);
+            scene.traverse(function(child) {
+                if (child.isMesh || child.type === "Group") {
+                    child.rotation.y += 0.01;
+                }
+            });
+            renderer.render(scene, camera);
+        }
+        animate();
+    }
+
+    function showSkinViewer(canvasId, skinUrl, playerName) {
+        const canvas = document.getElementById(canvasId);
         if (!canvas) return;
         if (canvas.viewerInstance && typeof canvas.viewerInstance.dispose === "function") {
             canvas.viewerInstance.dispose();
         }
         const skinViewer = new skinview3d.SkinViewer({
             canvas: canvas,
-            width: 140,
-            height: 140,
+            width: 240,
+            height: 240,
             skin: skinUrl
         });
         skinViewer.controls.enableZoom = false;
@@ -376,6 +390,7 @@
     function searchProfile() {
         const name = document.getElementById('searchInput').value.trim();
         const result = document.getElementById('profileResult');
+        result.classList.add('hidden');
         result.innerHTML = "";
 
         if (!name) return;
@@ -383,18 +398,25 @@
         const profile = wolfProfiles.find(p => p.name.toLowerCase() === name.toLowerCase());
         if (!profile) {
             result.innerHTML = renderNotFound(name);
-            setTimeout(() => showSkinViewer("https://mc-heads.net/skin/" + encodeURIComponent(name)), 0);
+            result.classList.remove('hidden');
+            setTimeout(() => {
+                showSkinViewer("skinviewer-canvas-notfound", "https://mc-heads.net/skin/" + encodeURIComponent(name), name);
+            }, 0);
             return;
         }
         result.innerHTML = renderProfile(profile);
-        setTimeout(() => showSkinViewer(profile.skin), 0);
+        result.classList.remove('hidden');
+        setTimeout(() => {
+            showSkinViewer(`skinviewer-canvas-${profile.name}`, profile.skin, profile.name);
+            if (profile.cosmetic) {
+                showCosmeticViewer(`cosmeticViewer-${profile.name}`, cosmetic.model, cosmetic.texture);
+            }
+        }, 0);
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        const steve = wolfProfiles.find(p => p.name === "Steve");
-        document.getElementById('profileResult').innerHTML = renderProfile(steve);
-        setTimeout(() => showSkinViewer(steve.skin), 0);
-
+        // Am Anfang nichts anzeigen
+        document.getElementById('profileResult').classList.add('hidden');
         document.getElementById('searchBtn').onclick = searchProfile;
         document.getElementById('searchInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') searchProfile();
