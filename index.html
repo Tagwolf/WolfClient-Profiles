@@ -240,23 +240,16 @@
         </div>
         <div id="profileResult" class="hidden"></div>
         <div class="footer">
-            <p>WolfClient &copy; 2025 | <a href="impressum.html">Impressum</a> & <a href="datenschutz.html">Datenschutz</a></p>
+            <p>WolfClient &copy; 2025 | <a href="https://zeppelino.de/impressum">Impressum</a> & <a href="https://zeppelino.de/datenschutz">Datenschutz</a></p>
         </div>
     </div>
     <script>
-    // Cosmetic-Definition (GLTF statt JSON)
-    const cosmetic = {
-        name: "Fishing Hat",
-        model: "01_fishing_hat.gltf"
-    };
-
     // Spieler-Liste mit Rängen und Cosmetics
     const wolfProfiles = [
         { name: "NightwolfLG", skin: "https://mc-heads.net/skin/NightwolfLG", rang: "Owner", cosmetic: true },
         { name: "dcue", skin: "https://mc-heads.net/skin/dcue", rang: "Freund", cosmetic: true },
         { name: "IchGeOOC", skin: "https://mc-heads.net/skin/IchGeOOC", rang: "Freund", cosmetic: true },
         { name: "Takatunga", skin: "https://mc-heads.net/skin/Takatunga", rang: "Streamer", cosmetic: true },
-        // Restliche Spieler ohne Cosmetic
         { name: "BimsHingefallt", skin: "https://mc-heads.net/skin/BimsHingefallt" },
         { name: "MagicWolfMC", skin: "https://mc-heads.net/skin/MagicWolfMC" },
         { name: "Steve", skin: "https://mc-heads.net/skin/Steve" },
@@ -290,7 +283,7 @@
                 <div class="cosmetic-side">
                     <div class="cosmetic-title">Cosmetics</div>
                     ${profile.cosmetic
-                        ? `<canvas id="${cosmeticId}" class="cosmetic-viewer" width="200" height="200"></canvas>`
+                        ? `<div id="cosmetic-container-${profile.name}"><canvas id="${cosmeticId}" class="cosmetic-viewer" width="200" height="200"></canvas></div>`
                         : `<div class="notfound"><b>${profile.name}</b> hat noch keine Cosmetics.</div>`
                     }
                 </div>
@@ -316,47 +309,69 @@
         `;
     }
 
-    function showCosmeticViewer(canvasId, modelPath) {
-        const canvas = document.getElementById(canvasId);
-        if (!canvas) return;
+    function showCosmeticViewer(playerName) {
+        const container = document.getElementById(`cosmetic-container-${playerName}`);
+        if (!container) return;
+        
+        // Clear previous content
+        container.innerHTML = '';
+        
+        // Create new canvas
+        const canvas = document.createElement('canvas');
+        canvas.className = 'cosmetic-viewer';
+        canvas.width = 200;
+        canvas.height = 200;
+        container.appendChild(canvas);
+        
         // THREE.js Setup
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
-        camera.position.set(0, 1, 6);
-
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        camera.position.set(0, 0, 2);
+        
+        const renderer = new THREE.WebGLRenderer({
+            canvas: canvas,
+            alpha: true,
+            antialias: true
+        });
+        renderer.setSize(200, 200);
         renderer.setClearColor(0x000000, 0);
 
-        // Licht
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
         scene.add(ambientLight);
-        const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
-        dirLight.position.set(5, 10, 7);
-        scene.add(dirLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(1, 1, 1);
+        scene.add(directionalLight);
 
-        // GLTF Modell laden
-        const loader = new THREE.GLTFLoader();
-        loader.load(modelPath, function (gltf) {
-            const obj = gltf.scene;
-            obj.position.y = 0;
-            obj.scale.set(1.2, 1.2, 1.2);
-            scene.add(obj);
-        }, undefined, function(error) {
-            // Fehlerbehandlung
-            console.error("GLTF Cosmetic konnte nicht geladen werden:", error);
-        });
-
-        // Animation (Rotation)
-        function animate() {
-            requestAnimationFrame(animate);
-            scene.traverse(function(child) {
-                if (child.isMesh || child.type === "Group") {
-                    child.rotation.y += 0.01;
-                }
+        try {
+            // Create a rotating cube with Minecraft-style colors
+            const colors = [0x43b581, 0x7289da, 0xa970ff, 0xff5252];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            const material = new THREE.MeshPhongMaterial({
+                color: color,
+                specular: 0x111111,
+                shininess: 30
             });
-            renderer.render(scene, camera);
+            const cube = new THREE.Mesh(geometry, material);
+            cube.scale.set(0.5, 0.5, 0.5);
+            scene.add(cube);
+            
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+            animate();
+            
+        } catch (error) {
+            console.error('Error creating 3D cosmetic:', error);
+            container.innerHTML = '<div class="notfound">3D-Vorschau konnte nicht geladen werden</div>';
         }
-        animate();
     }
 
     function showSkinViewer(canvasId, skinUrl, playerName) {
@@ -402,13 +417,12 @@
         setTimeout(() => {
             showSkinViewer(`skinviewer-canvas-${profile.name}`, profile.skin, profile.name);
             if (profile.cosmetic) {
-                showCosmeticViewer(`cosmeticViewer-${profile.name}`, cosmetic.model);
+                showCosmeticViewer(profile.name);
             }
         }, 0);
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Am Anfang nichts anzeigen
         document.getElementById('profileResult').classList.add('hidden');
         document.getElementById('searchBtn').onclick = searchProfile;
         document.getElementById('searchInput').addEventListener('keydown', function(e) {
